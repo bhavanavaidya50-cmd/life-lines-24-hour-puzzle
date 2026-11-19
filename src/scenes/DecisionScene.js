@@ -13,10 +13,10 @@ export class DecisionScene extends Phaser.Scene {
   init(data) {
     this.scenarioId = data.scenarioId || 1;
     this.scenario = getScenarioById(this.scenarioId);
-    this.clueSystem = data.clueSystem;
-    this.resourceSystem = data.resourceSystem;
-    this.timelineSystem = data.timelineSystem;
-    this.decisionSystem = new DecisionSystem(this.scenario.storyBeats);
+    this.clueSystem = data.clueSystem || new ClueSystem(this.scenario.clues);
+    this.resourceSystem = data.resourceSystem || new ResourceSystem(this.scenario.initialResources);
+    this.timelineSystem = data.timelineSystem || new TimelineSystem(6, 24);
+    this.decisionSystem = data.decisionSystem || new DecisionSystem(this.scenario.storyBeats);
   }
 
   create() {

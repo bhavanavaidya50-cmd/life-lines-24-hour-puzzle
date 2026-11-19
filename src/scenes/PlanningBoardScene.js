@@ -13,9 +13,9 @@ export class PlanningBoardScene extends Phaser.Scene {
   init(data) {
     this.scenarioId = data.scenarioId || 1;
     this.scenario = getScenarioById(this.scenarioId);
-    this.clueSystem = data.clueSystem;
-    this.resourceSystem = data.resourceSystem;
-    this.timelineSystem = new TimelineSystem(6, 24); // 6:00 to 24:00 (18 hours)
+    this.clueSystem = data.clueSystem || new ClueSystem(this.scenario.clues);
+    this.resourceSystem = data.resourceSystem || new ResourceSystem(this.scenario.initialResources);
+    this.timelineSystem = data.timelineSystem || new TimelineSystem(6, 24); // 6:00 to 24:00 (18 hours)
     this.availableTasks = [...this.scenario.tasks];
     this.selectedTask = null;
   }

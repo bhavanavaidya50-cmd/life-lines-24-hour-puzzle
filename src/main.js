@@ -42,5 +42,23 @@ const config = {
 };
 
 window.addEventListener('load', () => {
-  new Phaser.Game(config);
+  const game = new Phaser.Game(config);
+  window.game = game;
+
+  // URL Hash Navigation / Automation Support
+  const hash = window.location.hash.replace('#', '');
+  if (hash) {
+    const params = new URLSearchParams(hash);
+    const sceneTarget = params.get('scene');
+    const scenarioId = Number(params.get('scenario') || 1);
+    if (sceneTarget) {
+      game.events.once('ready', () => {
+        // Stop BootScene or whatever is active and switch immediately
+        setTimeout(() => {
+          game.scene.getScenes(true).forEach(s => s.scene.stop());
+          game.scene.start(sceneTarget, { scenarioId });
+        }, 150);
+      });
+    }
+  }
 });

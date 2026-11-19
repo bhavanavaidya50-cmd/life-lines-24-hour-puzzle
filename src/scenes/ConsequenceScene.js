@@ -4,6 +4,10 @@ import { UIComponents } from '../ui/UIComponents.js';
 import { getScenarioById } from '../data/scenarios.js';
 import { ScoringSystem } from '../systems/ScoringSystem.js';
 import { SaveSystem } from '../systems/SaveSystem.js';
+import { ClueSystem } from '../systems/ClueSystem.js';
+import { ResourceSystem } from '../systems/ResourceSystem.js';
+import { TimelineSystem } from '../systems/TimelineSystem.js';
+import { DecisionSystem } from '../systems/DecisionSystem.js';
 import { audioManager } from '../audio/AudioManager.js';
 
 export class ConsequenceScene extends Phaser.Scene {
@@ -14,11 +18,11 @@ export class ConsequenceScene extends Phaser.Scene {
   init(data) {
     this.scenarioId = data.scenarioId || 1;
     this.scenario = getScenarioById(this.scenarioId);
-    this.clueSystem = data.clueSystem;
-    this.resourceSystem = data.resourceSystem;
-    this.timelineSystem = data.timelineSystem;
-    this.decisionSystem = data.decisionSystem;
-    this.ending = data.ending;
+    this.clueSystem = data.clueSystem || new ClueSystem(this.scenario.clues);
+    this.resourceSystem = data.resourceSystem || new ResourceSystem(this.scenario.initialResources);
+    this.timelineSystem = data.timelineSystem || new TimelineSystem(6, 24);
+    this.decisionSystem = data.decisionSystem || new DecisionSystem(this.scenario.storyBeats);
+    this.ending = data.ending || this.scenario.endings[0];
 
     // Calculate score
     this.scoreResult = ScoringSystem.evaluateScenario({
